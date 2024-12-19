@@ -1,7 +1,6 @@
 import { Model } from 'mongoose';
 
 export interface iUser {
-  id: string;
   name: string;
   email: string;
   password: string;
@@ -12,8 +11,8 @@ export interface iUser {
 }
 
 export interface userModel extends Model<iUser> {
-  isUserExists(id: string): Promise<iUser>;
-  isBlocked(id: string): Promise<iUser>;
+  isUserExists(email: string): Promise<iUser>;
+  isBlocked(email: string): Promise<iUser>;
 
   verifyPassword(plainPass: string, hashPass: string): Promise<boolean>;
 }

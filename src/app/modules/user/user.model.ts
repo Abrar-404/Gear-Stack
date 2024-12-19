@@ -4,11 +4,7 @@ import config from '../../config';
 const bcrypt = require('bcrypt');
 
 const userModel = new Schema<iUser, userModel>({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+
   name: {
     type: String,
     required: true,
@@ -55,13 +51,13 @@ userModel.post('save', async function (doc, next) {
   next();
 });
 
-userModel.statics.isUserExists = async function (id: string) {
-  const result = await UserModel.findOne({ id });
+userModel.statics.isUserExists = async function (email: string) {
+  const result = await UserModel.findOne({ email });
   return result;
 };
 
-userModel.statics.isBlocked = async function (id: string) {
-  const user = await this.isUserExists(id);
+userModel.statics.isBlocked = async function (email: string) {
+  const user = await this.isUserExists(email);
   if (user && user.isBlocked) {
     throw new Error('User is blocked');
   }

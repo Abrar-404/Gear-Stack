@@ -6,14 +6,19 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const loginUser = async (payload: iAuth) => {
-  const user = await UserModel.isUserExists(payload.id);
+  const userData = await UserModel.findOne({ email: payload.email });
+  const user = await UserModel.isUserExists(payload.email);
   const verifyPassword = await UserModel.verifyPassword(
     payload?.password,
     user?.password,
   );
 
-  if (!user) {
+  if (!userData) {
     throw new Error('User does not exist');
+  }
+
+  if (!user) {
+    throw new Error('User not exists');
   }
 
   const blocked = user?.isBlocked;
@@ -27,7 +32,7 @@ const loginUser = async (payload: iAuth) => {
   }
 
   const jwtPayload = {
-    userId: user?.id,
+    userEmail: user?.email,
     role: user?.role,
   };
 
