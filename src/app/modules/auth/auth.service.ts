@@ -1,6 +1,7 @@
 import { UserModel } from '../user/user.model';
 import { iAuth } from './auth.interface';
 import { AppError } from './../../errors/AppErrors';
+const bcrypt = require('bcrypt');
 
 const loginUser = async (payload: iAuth) => {
   const isUserExists = await UserModel.findOne({ id: payload.id });
@@ -14,6 +15,12 @@ const loginUser = async (payload: iAuth) => {
   if (isBlocked === true) {
     throw new AppError(404, 'User Is Blocked', '');
   }
+
+  const isPasswordCorrect = await bcrypt.compare(
+    payload?.password,
+    isUserExists?.password,
+  );
+  console.log(isPasswordCorrect);
   return {};
 };
 

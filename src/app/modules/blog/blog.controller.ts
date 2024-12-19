@@ -13,6 +13,17 @@ const createBlog = CatchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllBlogs = CatchAsync(async (req, res) => {
+  const result = await blogService.getAllBlogsFromDB(req.query);
+  sendResponse(res, {
+    statusCode: 201,
+    success: true,
+    message: 'Blogs retrieved successfully',
+    data: result,
+  });
+});
+
 export const blogController = {
   createBlog,
+  getAllBlogs,
 };
