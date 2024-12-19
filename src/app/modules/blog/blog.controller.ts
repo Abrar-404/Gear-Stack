@@ -18,7 +18,7 @@ const getAllBlogs = CatchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 201,
     success: true,
-    message: 'Blogs retrieved successfully',
+    message: 'Blogs fetched successfully',
     data: result,
   });
 });
