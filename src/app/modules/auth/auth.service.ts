@@ -1,27 +1,23 @@
+import { Error } from 'mongoose';
 import { UserModel } from '../user/user.model';
 import { iAuth } from './auth.interface';
-import { AppError } from './../../errors/AppErrors';
 const bcrypt = require('bcrypt');
 
 const loginUser = async (payload: iAuth) => {
-  const isUserExists = await UserModel.findOne({ id: payload.id });
+  const user = await UserModel.isUserExists(payload.id);
 
-  if (!isUserExists) {
-    throw new AppError(404, 'User does not exist', '');
+  if (!user) {
+    throw new Error('User does not exist');
   }
 
-  const isBlocked = isUserExists?.isBlocked;
+  const blocked = user?.isBlocked;
 
-  if (isBlocked === true) {
-    throw new AppError(404, 'User Is Blocked', '');
+  if (blocked === true) {
+    throw new Error('User is blocked');
   }
 
-  const isPasswordCorrect = await bcrypt.compare(
-    payload?.password,
-    isUserExists?.password,
-  );
-  console.log(isPasswordCorrect);
-  return {};
+  if (!(await UserModel.verifyPassword(payload?.password, user?.password)))
+    throw new Error('Password is incorrect');
 };
 
 export const authService = {
