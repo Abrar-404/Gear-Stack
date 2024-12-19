@@ -47,9 +47,21 @@ const updateBlogs = CatchAsync(async (req, res) => {
   });
 });
 
+const deleteBlogs = CatchAsync(async (req, res) => {
+  const payload = req.params.id;
+  const result = await blogService.deleteBlogsFromDB(payload);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Blog deleted successfully',
+    data: result,
+  });
+});
+
 export const blogController = {
   createBlog,
   getAllBlogs,
   updateBlogs,
   getSingleBlog,
+  deleteBlogs,
 };
