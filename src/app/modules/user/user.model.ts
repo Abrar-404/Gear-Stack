@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const userModel = new Schema<iUser>({
   id: {
     type: String,
+    required: true,
+    unique: true,
   },
   name: {
     type: String,
