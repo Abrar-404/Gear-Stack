@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+const { status } = require('http-status');
 import { CatchAsync } from '../../utils/CatchAsync';
 import { blogService } from './blog.service';
 import { sendResponse } from '../../utils/sendResponse';
@@ -23,7 +24,32 @@ const getAllBlogs = CatchAsync(async (req, res) => {
   });
 });
 
+const getSingleBlog = CatchAsync(async (req, res) => {
+  const payload = req.params.id;
+  const result = await blogService.getSingleBlogFromDB(payload);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Blog fetched successfully',
+    data: result,
+  });
+});
+
+const updateBlogs = CatchAsync(async (req, res) => {
+  const id = req.params.id;
+  const payload = req.body;
+  const result = await blogService.updateBlogsFromDB(id, payload);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'Blog updated successfully',
+    data: result,
+  });
+});
+
 export const blogController = {
   createBlog,
   getAllBlogs,
+  updateBlogs,
+  getSingleBlog,
 };

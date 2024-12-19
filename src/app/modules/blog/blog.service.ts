@@ -52,7 +52,19 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   return sortQuery;
 };
 
+const getSingleBlogFromDB = async (id: string) => {
+  const result = await BlogModel.findById(id);
+  return result;
+};
+
+const updateBlogsFromDB = async (id: string, payload: Partial<iBlog>) => {
+  const result = await BlogModel.findByIdAndUpdate(id, payload, { new: true });
+
+  return result;
+};
 export const blogService = {
   createBlogIntoDB,
   getAllBlogsFromDB,
+  updateBlogsFromDB,
+  getSingleBlogFromDB,
 };
