@@ -11,9 +11,9 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   const queryObj = { ...query };
   const searchableFields = ['title'];
 
-  let searchTerm = '';
-  if (query?.searchTerm) {
-    searchTerm = query?.searchTerm as string;
+  let search = '';
+  if (query?.search) {
+    search = query?.search as string;
   }
 
   if (query?.author) {
@@ -27,21 +27,27 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
 
   const searchQuery = BlogModel.find({
     $or: searchableFields.map((field) => ({
-      [field]: { $regex: searchTerm, $options: 'i' },
+      [field]: { $regex: search, $options: 'i' },
     })),
   });
 
-  const excludeField = ['searchTerm', 'sort'];
+  const excludeField = ['search', 'sortBy', 'sortOrder'];
   excludeField.forEach((el) => delete queryObj[el]);
 
   const filterQuery = searchQuery.find(queryObj);
 
-  let sort = '-createdAt';
-  if (query.sort) {
-    sort = query.sort as string;
+  let sortBy = '-createdAt';
+  if (query.sortBy) {
+    sortBy = query.sortBy as string;
   }
 
-  const sortQuery = filterQuery.sort(sort);
+  let sortOrder = -1;
+  if (query?.sortOrder && query.sortOrder === 'asc') {
+    sortOrder = 1;
+  }
+  const sortQuery = filterQuery.sort({
+    [sortBy]: sortOrder as 1 | -1,
+  });
 
   return sortQuery;
 };
