@@ -6,6 +6,12 @@ const createUserIntoDB = async (payload: iUser): Promise<iUser> => {
   return result;
 };
 
+const getUserFromDB = async () => {
+  const result = await UserModel.find();
+  return result;
+};
+
 export const userService = {
   createUserIntoDB,
+  getUserFromDB,
 };
