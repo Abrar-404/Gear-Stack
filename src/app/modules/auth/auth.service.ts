@@ -1,6 +1,8 @@
 import { Error } from 'mongoose';
 import { UserModel } from '../user/user.model';
 import { iAuth } from './auth.interface';
+import config from '../../config';
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const loginUser = async (payload: iAuth) => {
@@ -23,6 +25,19 @@ const loginUser = async (payload: iAuth) => {
   if (!verifyPassword) {
     throw new Error('Password does not match');
   }
+
+  const jwtPayload = {
+    userId: user?.id,
+    role: user?.role,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: '10d',
+  });
+
+  return {
+    accessToken,
+  };
 };
 
 export const authService = {
