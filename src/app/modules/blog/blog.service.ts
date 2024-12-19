@@ -8,17 +8,33 @@ const createBlogIntoDB = async (payload: iBlog): Promise<iBlog> => {
 };
 
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
+  const queryObj = { ...query };
+  const searchableFields = ['title'];
 
   let searchTerm = '';
   if (query?.searchTerm) {
     searchTerm = query?.searchTerm as string;
   }
 
-  const result = await BlogModel.find({
-    $or: ['title'].map((field) => ({
+  if (query?.author) {
+    const authorId = query.author as string;
+    if (Types.ObjectId.isValid(authorId)) {
+      queryObj.author = new Types.ObjectId(authorId);
+    } else {
+      throw new Error('Invalid author ID');
+    }
+  }
+
+  const searchQuery = BlogModel.find({
+    $or: searchableFields.map((field) => ({
       [field]: { $regex: searchTerm, $options: 'i' },
     })),
   });
+
+  const excludeField = ['searchTerm'];
+  excludeField.forEach((el) => delete queryObj[el]);
+
+  const result = await searchQuery.find(queryObj);
   return result;
 };
 
@@ -26,3 +42,4 @@ export const blogService = {
   createBlogIntoDB,
   getAllBlogsFromDB,
 };
+
