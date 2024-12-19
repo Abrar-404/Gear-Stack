@@ -5,6 +5,10 @@ const bcrypt = require('bcrypt');
 
 const loginUser = async (payload: iAuth) => {
   const user = await UserModel.isUserExists(payload.id);
+  const verifyPassword = await UserModel.verifyPassword(
+    payload?.password,
+    user?.password,
+  );
 
   if (!user) {
     throw new Error('User does not exist');
@@ -16,8 +20,9 @@ const loginUser = async (payload: iAuth) => {
     throw new Error('User is blocked');
   }
 
-  if (!(await UserModel.verifyPassword(payload?.password, user?.password)))
-    throw new Error('Password is incorrect');
+  if (!verifyPassword) {
+    throw new Error('Password does not match');
+  }
 };
 
 export const authService = {
