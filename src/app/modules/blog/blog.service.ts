@@ -31,15 +31,22 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
     })),
   });
 
-  const excludeField = ['searchTerm'];
+  const excludeField = ['searchTerm', 'sort'];
   excludeField.forEach((el) => delete queryObj[el]);
 
-  const result = await searchQuery.find(queryObj);
-  return result;
+  const filterQuery = searchQuery.find(queryObj);
+
+  let sort = '-createdAt';
+  if (query.sort) {
+    sort = query.sort as string;
+  }
+
+  const sortQuery = filterQuery.sort(sort);
+
+  return sortQuery;
 };
 
 export const blogService = {
   createBlogIntoDB,
   getAllBlogsFromDB,
 };
-
