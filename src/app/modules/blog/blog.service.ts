@@ -16,8 +16,8 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
     search = query?.search as string;
   }
 
-  if (query?.author) {
-    const authorId = query.author as string;
+  if (query?.filter) {
+    const authorId = query.filter as string;
     if (Types.ObjectId.isValid(authorId)) {
       queryObj.author = new Types.ObjectId(authorId);
     } else {
@@ -31,7 +31,7 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
     })),
   });
 
-  const excludeField = ['search', 'sortBy', 'sortOrder'];
+  const excludeField = ['search', 'sortBy', 'sortOrder', 'filter'];
   excludeField.forEach((el) => delete queryObj[el]);
 
   const filterQuery = searchQuery.find(queryObj);
