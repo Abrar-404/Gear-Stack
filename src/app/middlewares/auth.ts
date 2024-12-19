@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { CatchAsync } from '../utils/CatchAsync';
 import { AppError } from '../errors/AppErrors';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 export const Auth = () => {
   return CatchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -19,10 +19,9 @@ export const Auth = () => {
           throw new Error('Your are not authorized');
         }
         // decoded undefined
-        console.log(decoded);
+        req.user = decoded as JwtPayload;
+        next();
       },
     );
-
-    next();
   });
 };
