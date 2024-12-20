@@ -1,8 +1,10 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 const { status } = require('http-status');
 import { CatchAsync } from '../../utils/CatchAsync';
 import { blogService } from './blog.service';
 import { sendResponse } from '../../utils/sendResponse';
+import { AppError } from '../../errors/AppErrors';
+import { BlogModel } from './blog.model';
 
 const createBlog = CatchAsync(async (req: Request, res: Response) => {
   const result = await blogService.createBlogIntoDB(req.body);
