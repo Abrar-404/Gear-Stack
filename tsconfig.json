@@ -105,7 +105,9 @@
 
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+       "typeRoots": ["./node_modules/@types", "./src/app/interface"], // Ensure this line exists and points to your type definitions if placed in a custom directory
+    "types": [] // Make sure no specific types are excluded unless intended
   },
-  "include": ["src/**/*", "index.d.ts"]
+  "include": ["src/**/*"]
 }

@@ -19,6 +19,7 @@ const createUser = CatchAsync(async (req: Request, res: Response) => {
 });
 
 const getUser = CatchAsync(async (req: Request, res: Response) => {
+  console.log('test', req.user);
   const result = await userService.getUserFromDB();
   sendResponse(res, {
     statusCode: 201,

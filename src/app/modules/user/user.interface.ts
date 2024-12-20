@@ -1,4 +1,5 @@
 import { Model } from 'mongoose';
+import { USER_ROLE } from './user.constants';
 
 export interface iUser {
   name: string;
@@ -16,3 +17,5 @@ export interface userModel extends Model<iUser> {
 
   verifyPassword(plainPass: string, hashPass: string): Promise<boolean>;
 }
+
+export type tUserRole = keyof typeof USER_ROLE;
