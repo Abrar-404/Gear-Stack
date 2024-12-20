@@ -13,7 +13,6 @@ const blogModel = new Schema<iBlog>({
   author: {
     type: Schema.Types.ObjectId,
     ref: 'UserModel',
-    required: true,
   },
   isPublished: {
     type: Boolean,
