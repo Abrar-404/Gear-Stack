@@ -2,13 +2,14 @@ import { Model } from 'mongoose';
 import { USER_ROLE } from './user.constants';
 
 export interface iUser {
+  _id?: string;
   name: string;
   email: string;
   password: string;
   role: 'admin' | 'user';
   isBlocked: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface userModel extends Model<iUser> {

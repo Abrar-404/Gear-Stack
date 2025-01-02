@@ -13,7 +13,6 @@ const getUserFromDB = async () => {
 };
 
 
-
 export const userService = {
   createUserIntoDB,
   getUserFromDB,

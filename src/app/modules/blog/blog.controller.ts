@@ -49,9 +49,9 @@ const updateBlogs = CatchAsync(async (req, res) => {
   });
 });
 
-const deleteBlogs = CatchAsync(async (req, res) => {
-  const payload = req.params.id;
-  const result = await blogService.deleteBlogsFromDB(payload);
+const deleteOwnBlog = CatchAsync(async (req, res) => {
+  const id = req.params.id;
+  const result = await blogService.deleteOwnBlogFromDB(id);
   sendResponse(res, {
     statusCode: status.OK,
     success: true,
@@ -65,5 +65,5 @@ export const blogController = {
   getAllBlogs,
   updateBlogs,
   getSingleBlog,
-  deleteBlogs,
+  deleteOwnBlog,
 };

@@ -63,14 +63,20 @@ const updateBlogsFromDB = async (id: string, payload: Partial<iBlog>) => {
   return result;
 };
 
-const deleteBlogsFromDB = async (id: string) => {
+const deleteOwnBlogFromDB = async (id: string) => {
+  const blog = await BlogModel.findById(id);
+  if (blog?.author?.toString() !== id) {
+    throw new Error('You are not allowed to delete this blog');
+  }
+
   const result = await BlogModel.findByIdAndDelete(id);
   return result;
 };
+
 export const blogService = {
   createBlogIntoDB,
   getAllBlogsFromDB,
   updateBlogsFromDB,
   getSingleBlogFromDB,
-  deleteBlogsFromDB,
+  deleteOwnBlogFromDB,
 };
